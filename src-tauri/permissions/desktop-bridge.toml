@@ -1,0 +1,4 @@
+[[permission]]
+identifier = "allow-desktop-bridge"
+description = "Allow the main workbench to receive and complete local desktop requests."
+commands.allow = ["desktop_next", "desktop_complete"]

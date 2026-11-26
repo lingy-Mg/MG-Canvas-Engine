@@ -1,0 +1,148 @@
+name: Windows x64
+
+"on":
+  push:
+    branches: ["**"]
+    tags: ["v*"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: windows-2025
+    timeout-minutes: 60
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      commit: ${{ steps.version.outputs.commit }}
+      artifact: ${{ steps.artifact.outputs.artifact-id }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "24.17.0"
+          architecture: x64
+          package-manager-cache: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.13.12"
+          architecture: x64
+      - name: Check release tag
+        if: github.ref_type == 'tag'
+        id: version
+        env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          $PSNativeCommandUseErrorActionPreference = $true
+          if ($env:TAG -cnotmatch '^v[0-9]+\.[0-9]+\.[0-9]+$') {
+            throw 'Release tags must have the form vX.Y.Z.'
+          }
+          $version = $env:TAG.Substring(1)
+          node scripts/publish.mjs --check-version $version
+          git merge-base --is-ancestor HEAD refs/remotes/origin/main
+          if ($LASTEXITCODE -ne 0) { throw 'Release commit must belong to public main.' }
+          $commit = git rev-parse HEAD
+          "version=$version" >> $env:GITHUB_OUTPUT
+          "commit=$commit" >> $env:GITHUB_OUTPUT
+      - name: Install locked dependencies
+        run: |
+          $PSNativeCommandUseErrorActionPreference = $true
+          npm ci
+          python -m pip install -r scripts/requirements-browser.txt
+          rustup toolchain install 1.97.1 --profile minimal --target x86_64-pc-windows-msvc
+          rustup override set 1.97.1
+      - name: Verify browser and desktop assets
+        run: |
+          $PSNativeCommandUseErrorActionPreference = $true
+          npm run verify
+          npm run desktop:assets
+          npm run check:desktop
+          cargo test --manifest-path src-tauri/Cargo.toml --target x86_64-pc-windows-msvc --release --locked --features custom-protocol
+      - name: Build and test the Windows installation
+        env:
+          RELEASE_VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          $PSNativeCommandUseErrorActionPreference = $true
+          npm run desktop:build
+          $installers = @(Get-ChildItem src-tauri/target/x86_64-pc-windows-msvc/release/bundle/nsis -File -Filter '*.exe')
+          if ($installers.Count -ne 1) { throw 'Expected exactly one NSIS installer.' }
+          pwsh -NoProfile -File scripts/check-installed-desktop.ps1 -Installer $installers[0].FullName -EvidenceDirectory dist/qa/installed-desktop
+          if ($env:RELEASE_VERSION) {
+            $name = "MG-Canvas-$env:RELEASE_VERSION-windows-x64-setup.exe"
+            New-Item -ItemType Directory -Force dist/github-release | Out-Null
+            Copy-Item $installers[0].FullName "dist/github-release/$name"
+            $digest = (Get-FileHash -Algorithm SHA256 "dist/github-release/$name").Hash.ToLowerInvariant()
+            "$digest  $name" | Set-Content -Encoding ascii "dist/github-release/$name.sha256"
+          }
+      - name: Upload installation evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: installed-desktop-evidence
+          path: dist/qa/installed-desktop
+          overwrite: true
+          if-no-files-found: ignore
+      - name: Upload verified release files
+        if: steps.version.outputs.version != ''
+        id: artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-x64-release
+          path: dist/github-release/
+          compression-level: 0
+          overwrite: true
+          if-no-files-found: error
+
+  publish:
+    if: github.ref_type == 'tag' && github.repository == 'lingy-Mg/MG-Canvas-Engine'
+    needs: verify
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    concurrency:
+      group: windows-release-${{ github.ref }}
+      cancel-in-progress: false
+    steps:
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          artifact-ids: ${{ needs.verify.outputs.artifact }}
+          path: release
+          merge-multiple: true
+      - name: Publish verified installer and checksum
+        working-directory: release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          VERSION: ${{ needs.verify.outputs.version }}
+          COMMIT: ${{ needs.verify.outputs.commit }}
+        shell: bash
+        run: |
+          [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]
+          [[ "$COMMIT" =~ ^[0-9a-f]{40}$ ]]
+          tag="v$VERSION"
+          [[ "$GITHUB_REF" == "refs/tags/$tag" ]]
+          refs=$(git ls-remote "https://github.com/$GH_REPO.git" "$GITHUB_REF" "$GITHUB_REF^{}")
+          target=$(awk -v ref="$GITHUB_REF" '$2 == ref {tag=$1} $2 == ref "^{}" {commit=$1} END {print (commit ? commit : tag)}' <<< "$refs")
+          if [[ "$target" != "$COMMIT" ]]; then
+            echo "::error::The tag no longer points to the tested commit."
+            exit 1
+          fi
+          installer="MG-Canvas-$VERSION-windows-x64-setup.exe"
+          sha256sum --check "$installer.sha256"
+          existing=$(gh api --paginate "repos/$GH_REPO/releases?per_page=100" --jq ".[] | select(.tag_name == \"$tag\") | [(.draft | tostring), .html_url] | @tsv")
+          if [[ "$existing" == true$'\t'* ]]; then
+            echo "::error::A draft already exists for $tag. Review the draft before rerunning."
+            exit 1
+          elif [[ -n "$existing" ]]; then
+            echo "${existing#*$'\t'}"
+            exit 0
+          fi
+          gh release create "$tag" "$installer" "$installer.sha256" \
+            --verify-tag --title "MG Canvas Engine $VERSION" --generate-notes \
+            --notes "Windows x64 安装包。项目自有代码和软件仅限非商业使用。第三方组件适用各自许可。许可全文见 [LICENSE](https://github.com/$GH_REPO/blob/$tag/LICENSE)。"

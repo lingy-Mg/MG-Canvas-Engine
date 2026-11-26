@@ -1,0 +1,134 @@
+{
+  "format": "mg-canvas.project",
+  "version": 1,
+  "document": {
+    "schemaVersion": 1,
+    "id": "m5y-text-layout",
+    "theme": "paper",
+    "objects": {
+      "approval": {
+        "id": "approval",
+        "kind": "text",
+        "at": {
+          "x": 32,
+          "y": 38
+        },
+        "width": 96,
+        "height": 22.4,
+        "rotation": 0,
+        "text": "审批（复核）",
+        "fontSize": 16,
+        "color": "#193e67",
+        "align": "left"
+      },
+      "fixed": {
+        "id": "fixed",
+        "kind": "text",
+        "at": {
+          "x": 192,
+          "y": 38
+        },
+        "width": 64,
+        "height": 44.8,
+        "rotation": 0,
+        "text": "审批通过，归档\n第三行已裁切",
+        "fontSize": 16,
+        "color": "#8e284c",
+        "align": "center",
+        "heightMode": "fixed"
+      },
+      "family": {
+        "id": "family",
+        "kind": "text",
+        "at": {
+          "x": 32,
+          "y": 147
+        },
+        "width": 32,
+        "height": 44.8,
+        "rotation": 0,
+        "text": "👩‍💻 ok",
+        "fontSize": 16,
+        "color": "#21584b",
+        "align": "left"
+      },
+      "accent": {
+        "id": "accent",
+        "kind": "text",
+        "at": {
+          "x": 142,
+          "y": 147
+        },
+        "width": 40,
+        "height": 67.2,
+        "rotation": 0,
+        "text": "Café\n\n末行",
+        "fontSize": 16,
+        "color": "#734196",
+        "align": "right"
+      },
+      "flow": {
+        "id": "flow",
+        "kind": "shape",
+        "shape": "rect",
+        "at": {
+          "x": 305,
+          "y": 125
+        },
+        "width": 68,
+        "height": 84,
+        "rotation": 0,
+        "cornerRadius": 5,
+        "fill": "#e4f2f5",
+        "stroke": "#276172",
+        "label": "审批通过，归档"
+      },
+      "map": {
+        "id": "map",
+        "kind": "mindmap",
+        "origin": {
+          "x": 152,
+          "y": 310
+        },
+        "rootId": "root",
+        "layout": "right",
+        "topics": {
+          "root": {
+            "id": "root",
+            "text": "审批通过，归档",
+            "childIds": [
+              "details"
+            ],
+            "collapsed": false,
+            "appearance": {
+              "width": 78,
+              "textColor": "#341852",
+              "fill": "#f2e9fa"
+            }
+          },
+          "details": {
+            "id": "details",
+            "text": "甲\n\n乙\n丙\n丁\n👩‍💻\n隐藏",
+            "childIds": [],
+            "collapsed": false,
+            "appearance": {
+              "width": 110,
+              "textColor": "#224a76",
+              "fill": "#e7effa"
+            }
+          }
+        }
+      }
+    },
+    "order": [
+      "approval",
+      "fixed",
+      "family",
+      "accent",
+      "flow",
+      "map"
+    ],
+    "assets": {}
+  },
+  "assets": {}
+}

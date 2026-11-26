@@ -1,0 +1,4 @@
+# Preserve published previews and sample project bytes on every platform.
+preview/*.html -text
+docs/fixtures/*.html -text
+docs/fixtures/*.mgcanvas -text

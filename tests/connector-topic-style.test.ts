@@ -1,0 +1,53 @@
+import { test } from "node:test";
+import assert from "node:assert/strict";
+import { demo } from "../app/demo.ts";
+import { DEFAULT_CONNECTOR_STROKE,validateDocument } from "../core/document.ts";
+import { styleConnector } from "../features/flow.ts";
+import { setTopicAppearance } from "../features/mindmap.ts";
+import { layoutMap } from "../features/mindmap-layout.ts";
+import { AssetVault } from "../features/image-assets.ts";
+import { decodeProject,encodeProject } from "../platform/project.ts";
+import { buildScene,hitTest,topicPaint } from "../scene/board.ts";
+import { EditorSession } from "../session/editor.ts";
+
+test("connector stroke keeps default and accepts width and paint with route+label in one undo",()=>{
+  const e=new EditorSession(demo),line=Object.values(demo.objects).find(item=>item.kind==="connector")!;
+  assert(line.kind==="connector");
+  const legacy=buildScene(demo).find(g=>g.id===line.id)?.items.find(i=>i.kind==="path");
+  assert(legacy?.kind==="path");assert.equal(legacy.width,DEFAULT_CONNECTOR_STROKE);
+  assert(!styleConnector(e,line.id,{label:line.label,routing:line.routing,arrow:line.arrow,strokeWidth:DEFAULT_CONNECTOR_STROKE}));
+  assert(!styleConnector(e,line.id,{label:"no",routing:"straight",arrow:"end",strokeWidth:0,stroke:"#f00"}));
+  assert(styleConnector(e,line.id,{label:"复核",routing:"straight",arrow:"both",strokeWidth:25,stroke:"#1337af"}));
+  const group=buildScene(e.doc).find(g=>g.id===line.id)!;
+  const path=group.items.find(i=>i.kind==="path")!;
+  assert(path.kind==="path");
+  assert.equal(path.width,25);assert.equal(path.color,"#1337af");assert.equal(path.arrow,"both");
+  const [a,b]=path.points,d=Math.hypot(b.x-a.x,b.y-a.y);
+  assert.equal(hitTest([group],{x:(a.x+b.x)/2+8*(a.y-b.y)/d,y:(a.y+b.y)/2+8*(b.x-a.x)/d},0),line.id);
+  assert.equal(e.history.past.length,1);e.undo();assert.deepEqual(e.doc.objects[line.id],line);
+});
+
+test("topic local style resizes auto-layout, honors inherited contrast and persists one undo",()=>{
+  const e=new EditorSession(demo),map=e.doc.objects["mind-room"];assert(map.kind==="mindmap");
+  const root=map.topics[map.rootId],child=root.childIds[0],ref={mapId:map.id,topicId:child};
+  assert.equal(topicPaint(map,root,"right").textColor,"#fff");
+  const builtin=layoutMap(map).find(x=>x.topic.id===child)!.box.width;
+  assert(!setTopicAppearance(e,ref,{width:197}));
+  assert(!setTopicAppearance(e,ref,{fill:"red"}));
+  assert(!setTopicAppearance(e,ref,{textColor:"#102334",strokeWidth:9}));
+  assert(setTopicAppearance(e,ref,{fill:"#111111",stroke:"#9984ee",strokeWidth:3,width:180}));
+  const edited=e.doc.objects[map.id];assert(edited.kind==="mindmap");
+  assert.notEqual(builtin,180);
+  const row=layoutMap(edited).find(x=>x.topic.id===child)!;
+  assert.equal(row.box.width,180);
+  assert.equal(topicPaint(edited,row.topic,row.side).textColor,"#fff");
+  const stored=decodeProject(encodeProject(e.doc,new AssetVault())).document.objects[map.id];assert(stored.kind==="mindmap");
+  assert.deepEqual(stored.topics[child].appearance,edited.topics[child].appearance);
+  assert.equal(e.history.past.length,1);
+  assert(setTopicAppearance(e,ref));e.undo();
+  const afterUndo=e.doc.objects[map.id];assert(afterUndo.kind==="mindmap");
+  assert.deepEqual(afterUndo.topics[child].appearance,edited.topics[child].appearance);
+  e.undo();assert.deepEqual(e.doc.objects[map.id],map);
+  const invalid={...demo,objects:{...demo.objects,[map.id]:{...map,topics:{...map.topics,[child]:{...map.topics[child],appearance:{width:-1}}}}}};
+  assert(validateDocument(invalid).some(x=>x.path.includes("appearance")));
+});

@@ -1,0 +1,141 @@
+{
+  "format": "mg-canvas.project",
+  "version": 1,
+  "document": {
+    "schemaVersion": 1,
+    "id": "m5v-drag-alignment",
+    "theme": "paper",
+    "objects": {
+      "internal": {
+        "kind": "connector",
+        "id": "internal",
+        "from": {
+          "kind": "anchor",
+          "objectId": "a",
+          "portId": "east"
+        },
+        "to": {
+          "kind": "anchor",
+          "objectId": "b",
+          "portId": "west"
+        },
+        "routing": "orthogonal",
+        "waypoints": [
+          {
+            "x": 96,
+            "y": 55
+          },
+          {
+            "x": 114,
+            "y": 55
+          }
+        ],
+        "label": "",
+        "arrow": "end",
+        "stroke": "#95516f"
+      },
+      "cross": {
+        "kind": "connector",
+        "id": "cross",
+        "from": {
+          "kind": "anchor",
+          "objectId": "b",
+          "portId": "east"
+        },
+        "to": {
+          "kind": "anchor",
+          "objectId": "outside",
+          "portId": "west"
+        },
+        "routing": "orthogonal",
+        "waypoints": [
+          {
+            "x": 239,
+            "y": 85
+          },
+          {
+            "x": 239,
+            "y": 243
+          }
+        ],
+        "label": "",
+        "arrow": "end",
+        "stroke": "#21816f"
+      },
+      "a": {
+        "kind": "shape",
+        "id": "a",
+        "shape": "rect",
+        "at": {
+          "x": 40,
+          "y": 70
+        },
+        "width": 40,
+        "height": 30,
+        "rotation": 0,
+        "cornerRadius": 4,
+        "fill": "#eaf1ff",
+        "stroke": "#375f98",
+        "label": "A"
+      },
+      "b": {
+        "kind": "shape",
+        "id": "b",
+        "shape": "rect",
+        "at": {
+          "x": 130,
+          "y": 70
+        },
+        "width": 40,
+        "height": 30,
+        "rotation": 0,
+        "cornerRadius": 4,
+        "fill": "#fff1d2",
+        "stroke": "#98631d",
+        "label": "B"
+      },
+      "target": {
+        "kind": "shape",
+        "id": "target",
+        "shape": "rect",
+        "at": {
+          "x": 220,
+          "y": 124
+        },
+        "width": 50,
+        "height": 35,
+        "rotation": 0,
+        "cornerRadius": 4,
+        "fill": "#f7e5ef",
+        "stroke": "#92446a",
+        "label": "对齐"
+      },
+      "outside": {
+        "kind": "shape",
+        "id": "outside",
+        "shape": "rect",
+        "at": {
+          "x": 400,
+          "y": 225
+        },
+        "width": 48,
+        "height": 36,
+        "rotation": 0,
+        "cornerRadius": 4,
+        "fill": "#e2f5ea",
+        "stroke": "#467459",
+        "label": "C"
+      }
+    },
+    "order": [
+      "internal",
+      "cross",
+      "a",
+      "b",
+      "target",
+      "outside"
+    ],
+    "assets": {}
+  },
+  "assets": {}
+}

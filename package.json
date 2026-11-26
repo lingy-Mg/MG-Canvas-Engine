@@ -1,0 +1,35 @@
+{
+  "name": "mg-canvas-engine",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24.3"
+  },
+  "scripts": {
+    "cli": "node scripts/mgcanvas.mjs",
+    "test": "node --test tests/*.test.ts",
+    "check:syntax": "node scripts/check.mjs",
+    "verify": "npm run check:syntax && npm test && npm run build && npm run check:bundle && npm run check:ui-smoke",
+    "clean": "node scripts/clean.mjs",
+    "build": "node scripts/build.mjs",
+    "preview": "node scripts/serve.mjs",
+    "check:bundle": "node scripts/check-bundle.mjs",
+    "bench": "node --expose-gc scripts/bench.ts",
+    "check:ui-smoke": "python scripts/check-react-browser.py && python scripts/check-react-clipboard.py",
+    "check:clipboard-smoke": "python scripts/check-react-clipboard.py",
+    "check:storage-smoke": "python scripts/check-react-browser.py --storage",
+    "bench:commit": "node --expose-gc scripts/bench-commit.ts",
+    "desktop:assets": "node scripts/build.mjs --desktop",
+    "desktop:build": "tauri build --target x86_64-pc-windows-msvc --bundles nsis -- --locked",
+    "check:desktop": "node scripts/check-desktop.mjs && python scripts/check-react-browser.py --desktop"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "2.12.5",
+    "react": "19.3.1",
+    "react-dom": "19.3.1"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "2.12.4",
+    "esbuild": "0.28.2"
+  }
+}

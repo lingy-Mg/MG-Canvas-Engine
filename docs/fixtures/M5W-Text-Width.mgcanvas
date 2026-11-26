@@ -1,0 +1,65 @@
+{
+  "format": "mg-canvas.project",
+  "version": 1,
+  "document": {
+    "schemaVersion": 1,
+    "id": "m5w-text-reflow",
+    "theme": "paper",
+    "objects": {
+      "auto": {
+        "kind": "text",
+        "id": "auto",
+        "at": {
+          "x": 40,
+          "y": 40
+        },
+        "width": 160,
+        "height": 168,
+        "rotation": 0,
+        "text": "中文排版換行測試\n日本語テスト\n한국어문장\nABCDEFGHIJKLMNOPQRSTUVWXYZ",
+        "fontSize": 20,
+        "color": "#263581",
+        "align": "center"
+      },
+      "fixed": {
+        "kind": "text",
+        "id": "fixed",
+        "at": {
+          "x": 325,
+          "y": 103
+        },
+        "width": 144,
+        "height": 43,
+        "rotation": 1.0471975511965976,
+        "text": "右側の基準\n한글換行檢查\nSupercalifragilistic",
+        "fontSize": 16,
+        "color": "#874135",
+        "align": "right",
+        "heightMode": "fixed"
+      },
+      "landmark": {
+        "kind": "shape",
+        "id": "landmark",
+        "shape": "rect",
+        "at": {
+          "x": 355,
+          "y": 245
+        },
+        "width": 86,
+        "height": 42,
+        "rotation": 0,
+        "cornerRadius": 6,
+        "fill": "#def2ef",
+        "stroke": "#417065",
+        "label": "定位"
+      }
+    },
+    "order": [
+      "landmark",
+      "auto",
+      "fixed"
+    ],
+    "assets": {}
+  },
+  "assets": {}
+}

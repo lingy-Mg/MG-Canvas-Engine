@@ -1,0 +1,19 @@
+dist/
+node_modules/
+
+# Local test output and caches.
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+/coverage/
+/test-results/
+/playwright-report/
+
+# Desktop file metadata.
+Thumbs.db
+.DS_Store
+
+# Native build outputs (retain Cargo.lock once resolved on the build host).
+src-tauri/target/
+src-tauri/gen/schemas/

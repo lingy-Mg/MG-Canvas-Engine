@@ -1,0 +1,606 @@
+{
+  "format": "mg-canvas.project",
+  "version": 1,
+  "title": "MG Canvas 编辑流程",
+  "document": {
+    "schemaVersion": 1,
+    "id": "mg-canvas-edit-lifecycle",
+    "theme": "paper",
+    "objects": {
+      "pointer-move": {
+        "id": "pointer-move",
+        "kind": "connector",
+        "from": {
+          "kind": "anchor",
+          "objectId": "app-input",
+          "portId": "south"
+        },
+        "to": {
+          "kind": "anchor",
+          "objectId": "session-drag",
+          "portId": "north"
+        },
+        "routing": "orthogonal",
+        "waypoints": [],
+        "label": "移动",
+        "arrow": "end",
+        "stroke": "#355D85",
+        "strokeWidth": 2.5
+      },
+      "preview-position": {
+        "id": "preview-position",
+        "kind": "connector",
+        "from": {
+          "kind": "anchor",
+          "objectId": "session-drag",
+          "portId": "east"
+        },
+        "to": {
+          "kind": "anchor",
+          "objectId": "scene-project",
+          "portId": "west"
+        },
+        "routing": "orthogonal",
+        "waypoints": [],
+        "label": "临时预览",
+        "arrow": "end",
+        "stroke": "#355D85",
+        "strokeWidth": 2.5
+      },
+      "visible-groups": {
+        "id": "visible-groups",
+        "kind": "connector",
+        "from": {
+          "kind": "anchor",
+          "objectId": "scene-project",
+          "portId": "south"
+        },
+        "to": {
+          "kind": "anchor",
+          "objectId": "renderer",
+          "portId": "north"
+        },
+        "routing": "orthogonal",
+        "waypoints": [],
+        "label": "图元",
+        "arrow": "end",
+        "stroke": "#355D85",
+        "strokeWidth": 2.5
+      },
+      "bound-path": {
+        "id": "bound-path",
+        "kind": "connector",
+        "from": {
+          "kind": "anchor",
+          "objectId": "flow-rules",
+          "portId": "south"
+        },
+        "to": {
+          "kind": "anchor",
+          "objectId": "scene-project",
+          "portId": "north"
+        },
+        "routing": "orthogonal",
+        "waypoints": [],
+        "label": "端口路径",
+        "arrow": "end",
+        "stroke": "#4C617A",
+        "strokeWidth": 2
+      },
+      "drop": {
+        "id": "drop",
+        "kind": "connector",
+        "from": {
+          "kind": "anchor",
+          "objectId": "session-drag",
+          "portId": "south"
+        },
+        "to": {
+          "kind": "anchor",
+          "objectId": "transaction",
+          "portId": "north"
+        },
+        "routing": "orthogonal",
+        "waypoints": [],
+        "label": "松手",
+        "arrow": "end",
+        "stroke": "#215E50",
+        "strokeWidth": 2.5
+      },
+      "remember": {
+        "id": "remember",
+        "kind": "connector",
+        "from": {
+          "kind": "anchor",
+          "objectId": "transaction",
+          "portId": "south"
+        },
+        "to": {
+          "kind": "anchor",
+          "objectId": "undo",
+          "portId": "north"
+        },
+        "routing": "orthogonal",
+        "waypoints": [],
+        "label": "保留前态",
+        "arrow": "end",
+        "stroke": "#215E50",
+        "strokeWidth": 2.5
+      },
+      "change-set": {
+        "id": "change-set",
+        "kind": "connector",
+        "from": {
+          "kind": "anchor",
+          "objectId": "transaction",
+          "portId": "east"
+        },
+        "to": {
+          "kind": "anchor",
+          "objectId": "app-change",
+          "portId": "west"
+        },
+        "routing": "orthogonal",
+        "waypoints": [],
+        "label": "ChangeSet",
+        "arrow": "end",
+        "stroke": "#215E50",
+        "strokeWidth": 2.5
+      },
+      "update-scene": {
+        "id": "update-scene",
+        "kind": "connector",
+        "from": {
+          "kind": "anchor",
+          "objectId": "app-change",
+          "portId": "east"
+        },
+        "to": {
+          "kind": "anchor",
+          "objectId": "scene-project",
+          "portId": "east"
+        },
+        "routing": "orthogonal",
+        "waypoints": [
+          {
+            "x": 394,
+            "y": 339
+          },
+          {
+            "x": 394,
+            "y": 200
+          }
+        ],
+        "label": "重绘",
+        "arrow": "end",
+        "stroke": "#215E50",
+        "strokeWidth": 2.5
+      },
+      "schedule": {
+        "id": "schedule",
+        "kind": "connector",
+        "from": {
+          "kind": "anchor",
+          "objectId": "app-change",
+          "portId": "south"
+        },
+        "to": {
+          "kind": "anchor",
+          "objectId": "save-queue",
+          "portId": "north"
+        },
+        "routing": "orthogonal",
+        "waypoints": [],
+        "label": "安排保存",
+        "arrow": "end",
+        "stroke": "#79501F",
+        "strokeWidth": 2.5
+      },
+      "write": {
+        "id": "write",
+        "kind": "connector",
+        "from": {
+          "kind": "anchor",
+          "objectId": "save-queue",
+          "portId": "south"
+        },
+        "to": {
+          "kind": "anchor",
+          "objectId": "browser-store",
+          "portId": "north"
+        },
+        "routing": "orthogonal",
+        "waypoints": [],
+        "label": "延迟写入",
+        "arrow": "end",
+        "stroke": "#79501F",
+        "strokeWidth": 2.5
+      },
+      "reload": {
+        "id": "reload",
+        "kind": "connector",
+        "from": {
+          "kind": "anchor",
+          "objectId": "browser-store",
+          "portId": "west"
+        },
+        "to": {
+          "kind": "anchor",
+          "objectId": "restore",
+          "portId": "east"
+        },
+        "routing": "orthogonal",
+        "waypoints": [],
+        "label": "同址重开",
+        "arrow": "end",
+        "stroke": "#79501F",
+        "strokeWidth": 2.5
+      },
+      "app-input": {
+        "id": "app-input",
+        "kind": "shape",
+        "shape": "rect",
+        "at": {
+          "x": 30,
+          "y": 102
+        },
+        "width": 130,
+        "height": 48,
+        "rotation": 0,
+        "cornerRadius": 8,
+        "fill": "#E7F1FB",
+        "stroke": "#7099BF",
+        "strokeWidth": 1.5,
+        "label": "app\n命中流程节点"
+      },
+      "session-drag": {
+        "id": "session-drag",
+        "kind": "shape",
+        "shape": "rect",
+        "at": {
+          "x": 30,
+          "y": 176
+        },
+        "width": 130,
+        "height": 48,
+        "rotation": 0,
+        "cornerRadius": 8,
+        "fill": "#E7F1FB",
+        "stroke": "#7099BF",
+        "strokeWidth": 1.5,
+        "label": "session\n暂存节点位移"
+      },
+      "scene-project": {
+        "id": "scene-project",
+        "kind": "shape",
+        "shape": "rect",
+        "at": {
+          "x": 229,
+          "y": 176
+        },
+        "width": 142,
+        "height": 48,
+        "rotation": 0,
+        "cornerRadius": 8,
+        "fill": "#E7F1FB",
+        "stroke": "#7099BF",
+        "strokeWidth": 1.5,
+        "label": "scene\n派生节点与连线"
+      },
+      "renderer": {
+        "id": "renderer",
+        "kind": "shape",
+        "shape": "rect",
+        "at": {
+          "x": 229,
+          "y": 248
+        },
+        "width": 142,
+        "height": 48,
+        "rotation": 0,
+        "cornerRadius": 8,
+        "fill": "#315F8B",
+        "stroke": "#315F8B",
+        "strokeWidth": 1.5,
+        "label": "renderers\nCanvas 2D 绘制"
+      },
+      "flow-rules": {
+        "id": "flow-rules",
+        "kind": "shape",
+        "shape": "rect",
+        "at": {
+          "x": 229,
+          "y": 102
+        },
+        "width": 142,
+        "height": 48,
+        "rotation": 0,
+        "cornerRadius": 8,
+        "fill": "#F1F5FA",
+        "stroke": "#8193AA",
+        "strokeWidth": 1.5,
+        "label": "features\n计算端口路由"
+      },
+      "undo": {
+        "id": "undo",
+        "kind": "shape",
+        "shape": "rect",
+        "at": {
+          "x": 30,
+          "y": 386
+        },
+        "width": 130,
+        "height": 48,
+        "rotation": 0,
+        "cornerRadius": 8,
+        "fill": "#E2F2EC",
+        "stroke": "#77AA98",
+        "strokeWidth": 1.5,
+        "label": "core\n记录撤销历史"
+      },
+      "transaction": {
+        "id": "transaction",
+        "kind": "shape",
+        "shape": "rect",
+        "at": {
+          "x": 30,
+          "y": 315
+        },
+        "width": 130,
+        "height": 48,
+        "rotation": 0,
+        "cornerRadius": 8,
+        "fill": "#256D5D",
+        "stroke": "#256D5D",
+        "strokeWidth": 1.5,
+        "label": "core\n校验并提交移动"
+      },
+      "app-change": {
+        "id": "app-change",
+        "kind": "shape",
+        "shape": "rect",
+        "at": {
+          "x": 229,
+          "y": 315
+        },
+        "width": 142,
+        "height": 48,
+        "rotation": 0,
+        "cornerRadius": 8,
+        "fill": "#E2F2EC",
+        "stroke": "#77AA98",
+        "strokeWidth": 1.5,
+        "label": "app\n接收文档变更"
+      },
+      "save-queue": {
+        "id": "save-queue",
+        "kind": "shape",
+        "shape": "rect",
+        "at": {
+          "x": 229,
+          "y": 449
+        },
+        "width": 142,
+        "height": 48,
+        "rotation": 0,
+        "cornerRadius": 8,
+        "fill": "#FFF0D9",
+        "stroke": "#C99551",
+        "strokeWidth": 1.5,
+        "label": "platform\n调度自动保存"
+      },
+      "browser-store": {
+        "id": "browser-store",
+        "kind": "shape",
+        "shape": "rect",
+        "at": {
+          "x": 229,
+          "y": 526
+        },
+        "width": 142,
+        "height": 48,
+        "rotation": 0,
+        "cornerRadius": 8,
+        "fill": "#89571E",
+        "stroke": "#89571E",
+        "strokeWidth": 1.5,
+        "label": "IndexedDB\n写入工作区快照"
+      },
+      "restore": {
+        "id": "restore",
+        "kind": "shape",
+        "shape": "rect",
+        "at": {
+          "x": 30,
+          "y": 526
+        },
+        "width": 130,
+        "height": 48,
+        "rotation": 0,
+        "cornerRadius": 8,
+        "fill": "#FFF0D9",
+        "stroke": "#C99551",
+        "strokeWidth": 1.5,
+        "label": "app\n恢复画板与视口"
+      },
+      "architecture-title": {
+        "kind": "text",
+        "id": "architecture-title",
+        "at": {
+          "x": 3,
+          "y": 0
+        },
+        "width": 392,
+        "height": 40,
+        "rotation": 0,
+        "text": "MG Canvas 编辑流程",
+        "fontSize": 28,
+        "fontFamily": "system",
+        "fontWeight": 700,
+        "align": "left",
+        "color": "#263953",
+        "colorMode": "auto"
+      },
+      "case": {
+        "kind": "text",
+        "id": "case",
+        "at": {
+          "x": 5,
+          "y": 39
+        },
+        "width": 388,
+        "height": 22,
+        "rotation": 0,
+        "text": "拖动一个已连线的流程节点",
+        "fontSize": 15,
+        "fontFamily": "system",
+        "fontWeight": 400,
+        "align": "left",
+        "color": "#536176",
+        "colorMode": "auto"
+      },
+      "gesture-heading": {
+        "kind": "text",
+        "id": "gesture-heading",
+        "at": {
+          "x": 4,
+          "y": 68
+        },
+        "width": 100,
+        "height": 27,
+        "rotation": 0,
+        "text": "拖动预览",
+        "fontSize": 20,
+        "fontFamily": "system",
+        "fontWeight": 700,
+        "align": "left",
+        "color": "#294E79",
+        "colorMode": "auto"
+      },
+      "gesture-note": {
+        "kind": "text",
+        "id": "gesture-note",
+        "at": {
+          "x": 117,
+          "y": 75
+        },
+        "width": 160,
+        "height": 19,
+        "rotation": 0,
+        "text": "临时位移驱动画面",
+        "fontSize": 13,
+        "fontFamily": "system",
+        "fontWeight": 400,
+        "align": "left",
+        "color": "#536176",
+        "colorMode": "auto"
+      },
+      "change-heading": {
+        "kind": "text",
+        "id": "change-heading",
+        "at": {
+          "x": 4,
+          "y": 246
+        },
+        "width": 90,
+        "height": 27,
+        "rotation": 0,
+        "text": "提交变更",
+        "fontSize": 20,
+        "fontFamily": "system",
+        "fontWeight": 700,
+        "align": "left",
+        "color": "#21624F",
+        "colorMode": "auto"
+      },
+      "change-note": {
+        "kind": "text",
+        "id": "change-note",
+        "at": {
+          "x": 5,
+          "y": 276
+        },
+        "width": 88,
+        "height": 19,
+        "rotation": 0,
+        "text": "一步可撤销",
+        "fontSize": 13,
+        "fontFamily": "system",
+        "fontWeight": 400,
+        "align": "left",
+        "color": "#536176",
+        "colorMode": "auto"
+      },
+      "save-heading": {
+        "kind": "text",
+        "id": "save-heading",
+        "at": {
+          "x": 4,
+          "y": 447
+        },
+        "width": 166,
+        "height": 27,
+        "rotation": 0,
+        "text": "保存与恢复",
+        "fontSize": 20,
+        "fontFamily": "system",
+        "fontWeight": 700,
+        "align": "left",
+        "color": "#79501E",
+        "colorMode": "auto"
+      },
+      "save-note": {
+        "kind": "text",
+        "id": "save-note",
+        "at": {
+          "x": 5,
+          "y": 477
+        },
+        "width": 205,
+        "height": 19,
+        "rotation": 0,
+        "text": "同一浏览器、同一地址",
+        "fontSize": 13,
+        "fontFamily": "system",
+        "fontWeight": 400,
+        "align": "left",
+        "color": "#536176",
+        "colorMode": "auto"
+      }
+    },
+    "order": [
+      "pointer-move",
+      "preview-position",
+      "visible-groups",
+      "bound-path",
+      "drop",
+      "remember",
+      "change-set",
+      "update-scene",
+      "schedule",
+      "write",
+      "reload",
+      "app-input",
+      "session-drag",
+      "scene-project",
+      "renderer",
+      "flow-rules",
+      "undo",
+      "transaction",
+      "app-change",
+      "save-queue",
+      "browser-store",
+      "restore",
+      "architecture-title",
+      "case",
+      "gesture-heading",
+      "gesture-note",
+      "change-heading",
+      "change-note",
+      "save-heading",
+      "save-note"
+    ],
+    "assets": {}
+  },
+  "assets": {}
+}

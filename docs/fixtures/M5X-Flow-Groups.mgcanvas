@@ -1,0 +1,214 @@
+{
+  "format": "mg-canvas.project",
+  "version": 1,
+  "document": {
+    "schemaVersion": 5,
+    "id": "m5x-flow-groups",
+    "theme": "paper",
+    "objects": {
+      "internal": {
+        "kind": "connector",
+        "id": "internal",
+        "from": {
+          "kind": "anchor",
+          "objectId": "a",
+          "portId": "east"
+        },
+        "to": {
+          "kind": "anchor",
+          "objectId": "b",
+          "portId": "west"
+        },
+        "routing": "orthogonal",
+        "waypoints": [
+          {
+            "x": 120,
+            "y": 28
+          },
+          {
+            "x": 142,
+            "y": 28
+          }
+        ],
+        "label": "",
+        "arrow": "end",
+        "stroke": "#95516f"
+      },
+      "cross": {
+        "kind": "connector",
+        "id": "cross",
+        "from": {
+          "kind": "anchor",
+          "objectId": "b",
+          "portId": "east"
+        },
+        "to": {
+          "kind": "anchor",
+          "objectId": "outside",
+          "portId": "west"
+        },
+        "routing": "orthogonal",
+        "waypoints": [
+          {
+            "x": 290,
+            "y": 67
+          },
+          {
+            "x": 290,
+            "y": 191
+          }
+        ],
+        "label": "",
+        "arrow": "end",
+        "stroke": "#21816f"
+      },
+      "a": {
+        "kind": "shape",
+        "id": "a",
+        "shape": "rect",
+        "at": {
+          "x": 25,
+          "y": 48
+        },
+        "width": 78,
+        "height": 38,
+        "rotation": 0,
+        "cornerRadius": 4,
+        "fill": "#eaf1ff",
+        "stroke": "#375f98",
+        "label": "接收"
+      },
+      "b": {
+        "kind": "shape",
+        "id": "b",
+        "shape": "rect",
+        "at": {
+          "x": 159,
+          "y": 48
+        },
+        "width": 78,
+        "height": 38,
+        "rotation": 0,
+        "cornerRadius": 4,
+        "fill": "#fff1d2",
+        "stroke": "#98631d",
+        "label": "核对"
+      },
+      "target": {
+        "kind": "shape",
+        "id": "target",
+        "shape": "rect",
+        "at": {
+          "x": 101,
+          "y": 132
+        },
+        "width": 78,
+        "height": 38,
+        "rotation": 0,
+        "cornerRadius": 4,
+        "fill": "#f7e5ef",
+        "stroke": "#92446a",
+        "label": "登记"
+      },
+      "outside": {
+        "kind": "shape",
+        "id": "outside",
+        "shape": "rect",
+        "at": {
+          "x": 352,
+          "y": 172
+        },
+        "width": 78,
+        "height": 38,
+        "rotation": 0,
+        "cornerRadius": 4,
+        "fill": "#e2f5ea",
+        "stroke": "#467459",
+        "label": "复核"
+      },
+      "review": {
+        "kind": "shape",
+        "id": "review",
+        "shape": "rect",
+        "at": {
+          "x": 483,
+          "y": 172
+        },
+        "width": 78,
+        "height": 38,
+        "rotation": 0,
+        "cornerRadius": 4,
+        "fill": "#e2f5ea",
+        "stroke": "#467459",
+        "label": "归档"
+      },
+      "standalone": {
+        "kind": "shape",
+        "id": "standalone",
+        "shape": "rect",
+        "at": {
+          "x": 355,
+          "y": 45
+        },
+        "width": 78,
+        "height": 38,
+        "rotation": 0,
+        "cornerRadius": 4,
+        "fill": "#f7e5ef",
+        "stroke": "#92446a",
+        "label": "单独节点"
+      },
+      "review-link": {
+        "kind": "connector",
+        "id": "review-link",
+        "from": {
+          "kind": "anchor",
+          "objectId": "outside",
+          "portId": "east"
+        },
+        "to": {
+          "kind": "anchor",
+          "objectId": "review",
+          "portId": "west"
+        },
+        "routing": "orthogonal",
+        "waypoints": [
+          {
+            "x": 455,
+            "y": 211
+          }
+        ],
+        "label": "",
+        "arrow": "end",
+        "stroke": "#95516f"
+      }
+    },
+    "order": [
+      "internal",
+      "a",
+      "review-link",
+      "outside",
+      "cross",
+      "b",
+      "standalone",
+      "review",
+      "target"
+    ],
+    "assets": {},
+    "flowGroups": {
+      "baseVersion": 1,
+      "members": {
+        "group-intake": [
+          "a",
+          "b",
+          "target"
+        ],
+        "group-review": [
+          "outside",
+          "review"
+        ]
+      }
+    }
+  },
+  "assets": {}
+}

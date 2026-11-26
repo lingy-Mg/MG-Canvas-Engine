@@ -1,0 +1,155 @@
+{
+  "format": "mg-canvas.project",
+  "version": 1,
+  "document": {
+    "schemaVersion": 1,
+    "id": "m5aa-connector-colors",
+    "theme": "paper",
+    "objects": {
+      "route": {
+        "kind": "connector",
+        "id": "route",
+        "from": {
+          "kind": "anchor",
+          "objectId": "review",
+          "portId": "east"
+        },
+        "to": {
+          "kind": "anchor",
+          "objectId": "decision",
+          "portId": "west"
+        },
+        "routing": "orthogonal",
+        "waypoints": [
+          {
+            "x": 225,
+            "y": 92
+          },
+          {
+            "x": 225,
+            "y": 46
+          },
+          {
+            "x": 285,
+            "y": 46
+          },
+          {
+            "x": 285,
+            "y": 102
+          }
+        ],
+        "label": "",
+        "arrow": "end",
+        "stroke": "rebeccapurple",
+        "strokeWidth": 3
+      },
+      "arrival": {
+        "kind": "connector",
+        "id": "arrival",
+        "from": {
+          "kind": "anchor",
+          "objectId": "archive",
+          "portId": "west"
+        },
+        "to": {
+          "kind": "anchor",
+          "objectId": "review",
+          "portId": "south"
+        },
+        "routing": "orthogonal",
+        "waypoints": [
+          {
+            "x": 344,
+            "y": 232
+          },
+          {
+            "x": 344,
+            "y": 208
+          },
+          {
+            "x": 150,
+            "y": 208
+          }
+        ],
+        "label": "",
+        "arrow": "end",
+        "stroke": "#538175",
+        "strokeWidth": 3
+      },
+      "review": {
+        "kind": "shape",
+        "id": "review",
+        "shape": "rect",
+        "at": {
+          "x": 40,
+          "y": 60
+        },
+        "width": 120,
+        "height": 64,
+        "rotation": 0,
+        "cornerRadius": 12,
+        "fill": "transparent",
+        "stroke": "rebeccapurple",
+        "label": "提交审批"
+      },
+      "decision": {
+        "kind": "shape",
+        "id": "decision",
+        "shape": "diamond",
+        "at": {
+          "x": 328,
+          "y": 60
+        },
+        "width": 120,
+        "height": 84,
+        "rotation": 0,
+        "cornerRadius": 0,
+        "fill": "#fff1d2",
+        "stroke": "#916425",
+        "label": "需要复核？"
+      },
+      "archive": {
+        "kind": "shape",
+        "id": "archive",
+        "shape": "triangle",
+        "at": {
+          "x": 424,
+          "y": 198
+        },
+        "width": 112,
+        "height": 68,
+        "rotation": 0,
+        "cornerRadius": 0,
+        "fill": "#e1efe9",
+        "stroke": "#35614f",
+        "label": "归档"
+      },
+      "note": {
+        "kind": "text",
+        "id": "note",
+        "at": {
+          "x": 207,
+          "y": 150
+        },
+        "width": 175,
+        "height": 32,
+        "rotation": 0,
+        "text": "复核记录",
+        "fontSize": 16,
+        "color": "rebeccapurple",
+        "align": "left",
+        "heightMode": "fixed"
+      }
+    },
+    "order": [
+      "route",
+      "arrival",
+      "review",
+      "decision",
+      "archive",
+      "note"
+    ],
+    "assets": {}
+  },
+  "assets": {}
+}

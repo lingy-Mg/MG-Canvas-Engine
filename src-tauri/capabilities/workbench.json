@@ -1,0 +1,5 @@
+{
+  "identifier": "workbench",
+  "webviews": ["main"],
+  "permissions": ["allow-desktop-bridge"]
+}

@@ -1,0 +1,15 @@
+{
+  "format":"mg-canvas.project","version":1,
+  "document":{
+    "schemaVersion":1,"id":"selection-translation","theme":"paper",
+    "order":["internal","cross","a","b","outside"],"assets":{},
+    "objects":{
+      "a":{"kind":"shape","id":"a","shape":"rect","at":{"x":10,"y":10},"width":16,"height":14,"rotation":0,"cornerRadius":2,"fill":"#eaf1ff","stroke":"#375f98","label":"A"},
+      "b":{"kind":"shape","id":"b","shape":"rect","at":{"x":40,"y":10},"width":16,"height":14,"rotation":0,"cornerRadius":2,"fill":"#fdf3d7","stroke":"#976422","label":"B"},
+      "outside":{"kind":"shape","id":"outside","shape":"rect","at":{"x":90,"y":40},"width":20,"height":14,"rotation":0,"cornerRadius":2,"fill":"#e2f8ea","stroke":"#457e58","label":"C"},
+      "internal":{"kind":"connector","id":"internal","from":{"kind":"anchor","objectId":"a","portId":"east"},"to":{"kind":"anchor","objectId":"b","portId":"west"},"routing":"orthogonal","waypoints":[{"x":30,"y":4},{"x":36,"y":4}],"label":"","arrow":"end","stroke":"#9c3468"},
+      "cross":{"kind":"connector","id":"cross","from":{"kind":"anchor","objectId":"b","portId":"east"},"to":{"kind":"anchor","objectId":"outside","portId":"west"},"routing":"orthogonal","waypoints":[{"x":68,"y":17},{"x":68,"y":47}],"label":"","arrow":"end","stroke":"#2c8379"}
+    }
+  },
+  "assets":{}
+}
